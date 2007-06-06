@@ -20,6 +20,7 @@ Source3:	sqlzma.h
 Patch2:		lzma-4.43-lzmp.patch
 Patch3:		sqlzma1-443.patch
 Patch4:		lzma-4.43-add-missing-header.patch
+Patch5:		lzma-4.43-quiet.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -88,6 +89,7 @@ for i in `find src/sdk.old -name Makefile.\*`; do
 done
 find src/sdk -name makefile|xargs rm -f
 %patch4 -p1 -b .config_h
+%patch5 -p1 -b .quiet
 
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
