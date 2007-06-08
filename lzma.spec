@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
-%define	release	%mkrel 5
 %define	oldlzmaver	4.32.0beta3
+%define	release	%mkrel 6
 %define	major	0
 %define	libname	%mklibname lzmadec %{major}
 
@@ -17,10 +17,13 @@ Source2:	lzme.bz2
 Source3:	sqlzma.h
 #Patch0:	lzma-432-makefile.patch.bz2
 #Patch1:	lzma-432-makefile-sdknew.patch.bz2
-Patch2:		lzma-4.43-lzmp.patch
+#Patch2:	lzma-4.43-lzmp.patch
 Patch3:		sqlzma1-443.patch
 Patch4:		lzma-4.43-add-missing-header.patch
 Patch5:		lzma-4.43-quiet.patch
+Patch6:		lzma-4.43-update-version.patch
+Patch7:		lzma-4.43-fix-fast-compression.patch
+Patch8:		lzma-4.43-add-missing-gethandle.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -75,7 +78,7 @@ Devel libraries & headers for liblzmadec.
 %setup -q -n %{name}-%{oldlzmaver} -a1
 #%patch0 -p1 -b .427
 #%patch1 -p1 -b .427_sdk
-%patch2 -p1
+#%patch2 -p1
 %patch3 -p1 -b .liblzma_r
 bzcat %{SOURCE2} > lzme
 cp %{SOURCE3} .
@@ -87,13 +90,18 @@ cp -r C src/sdk
 for i in `find src/sdk.old -name Makefile.\*`; do
 	cp $i `echo $i|sed -e 's#sdk.old#sdk#g'`;
 done
+
 find src/sdk -name makefile|xargs rm -f
+
 %patch4 -p1 -b .config_h
 %patch5 -p1 -b .quiet
+%patch6 -p0 -b .version
+%patch7 -p0 -b .fast
+%patch8 -p0 -b .gethandle
 
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
-CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -DPACKAGE_VERSION=\\\"%{oldlzmaver}\\\"" \
+CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 %configure2_5x
 %make
 %make -C C/7zip/Compress/LZMA_C -f sqlzma.mk Sqlzma=../../../..
@@ -131,5 +139,4 @@ rm -rf %{buildroot}
 %{_includedir}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.a
-
 
