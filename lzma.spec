@@ -1,9 +1,9 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.0beta3
-%define	release	%mkrel 6
+%define	release	%mkrel 7
 %define	major	0
-%define	libname	%mklibname lzmadec %{major}
+%define	libname	%mklibname lzma %{major}
 
 Summary: 	LZMA utils
 Name: 		%{name}
@@ -55,14 +55,6 @@ tools. Also provides:
 - The patch for GNU tar integrates LZMA compression with the tar
   command in the same way as with gzip and bzip2.
 
-%package -n	%{libname}
-Summary:	Libraries for decoding LZMA compression
-Group:		System/Libraries
-License:	LGPL
-
-%description -n %{libname}
-Libraries for decoding LZMA compression.
-
 %package -n	%{libname}-devel
 Summary:	Devel libraries & headers for liblzmadec
 Group:		Development/C
@@ -102,7 +94,7 @@ find src/sdk -name makefile|xargs rm -f
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
-%configure2_5x
+%configure2_5x --disable-static
 %make
 %make -C C/7zip/Compress/LZMA_C -f sqlzma.mk Sqlzma=../../../..
 %make -C C/7zip/Compress/LZMA_Alone -f sqlzma.mk Sqlzma=../../../..
@@ -110,14 +102,13 @@ CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-install -m755 lzme %{buildroot}%{_bindir}
-rm -f %{buildroot}%{_libdir}/*.la
+install -m755 lzme -D %{buildroot}%{_bindir}/lzme
+
+rm -f %{buildroot}%{_libdir}/*.{la,so*}
+
 #symlink to provide backward compatibility for stuff still using old 'lzmash' script
 ln -s lzma %{buildroot}%{_bindir}/lzmash
 install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
-
-%post -n %{libname} -p /sbin/ldconfig
-%postun -n %{libname} -p /sbin/ldconfig
 
 %clean
 rm -rf %{buildroot}
@@ -128,15 +119,9 @@ rm -rf %{buildroot}
 %{_bindir}/*
 %{_mandir}/man1/*
 
-%files -n %{libname}
-%defattr(-,root,root)
-%{_libdir}/lib*.so.*
-
 %files -n %{libname}-devel
 %defattr(644,root,root,755)
 %doc *.txt
 %defattr(-,root,root)
 %{_includedir}/*.h
-%{_libdir}/*.so
 %{_libdir}/*.a
-
