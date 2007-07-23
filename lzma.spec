@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.0beta3
-%define	release	%mkrel 10
+%define	release	%mkrel 11
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -25,6 +25,7 @@ Patch6:		lzma-4.43-update-version.patch
 Patch7:		lzma-4.43-fix-fast-compression.patch
 Patch8:		lzma-4.43-add-missing-gethandle.patch
 Patch9:		lzma-4.43-text-tune.patch
+Patch10:	lzma-4.32.0beta3-fix-stdout.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -100,6 +101,7 @@ find src/sdk -name makefile|xargs rm -f
 %patch7 -p0 -b .fast
 %patch8 -p0 -b .gethandle
 %patch9 -p0 -b .text
+%patch10 -p1 -b .stdout
 
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
