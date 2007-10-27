@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
-%define	oldlzmaver	4.32.0beta4
-%define	release	%mkrel 12
+%define	oldlzmaver	4.32.2
+%define	release	%mkrel 13
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -26,7 +26,9 @@ Patch7:		lzma-4.43-fix-fast-compression.patch
 Patch8:		lzma-4.43-add-missing-gethandle.patch
 Patch9:		lzma-4.43-text-tune.patch
 #Patch10:	lzma-4.32.0beta3-fix-stdout.patch
-Patch11:	lzma-4.43-fix-liblzmadec-header-includes.patch
+#Patch11:	lzma-4.43-fix-liblzmadec-header-includes.patch
+# 4.32.2 has changes to sdk that we replace with newer, we apply these to the new
+Patch12:	lzma-4.32.2-sdk-changes.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -103,7 +105,9 @@ find src/sdk -name makefile|xargs rm -f
 %patch8 -p0 -b .gethandle
 %patch9 -p0 -b .text
 #%patch10 -p1 -b .stdout
-%patch11 -p1 -b .lzmadec_systypes
+#%patch11 -p1 -b .lzmadec_systypes
+%patch12 -p1 -b .4.32.2
+
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
