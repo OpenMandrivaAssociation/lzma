@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.2
-%define	release	%mkrel 13
+%define	release	%mkrel 14
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -29,6 +29,7 @@ Patch9:		lzma-4.43-text-tune.patch
 #Patch11:	lzma-4.43-fix-liblzmadec-header-includes.patch
 # 4.32.2 has changes to sdk that we replace with newer, we apply these to the new
 Patch12:	lzma-4.32.2-sdk-changes.patch
+Patch13:	lzma-4.32.2-file_modes.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -107,6 +108,7 @@ find src/sdk -name makefile|xargs rm -f
 #%patch10 -p1 -b .stdout
 #%patch11 -p1 -b .lzmadec_systypes
 %patch12 -p1 -b .4.32.2
+%patch13 -p1 -b .file_modes
 
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
