@@ -132,6 +132,9 @@ install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
 %clean
 rm -rf %{buildroot}
 
+%post -n %{libname} -p /sbin/ldconfig
+%postun -n %{libname} -p /sbin/ldconfig
+
 %files
 %defattr(-,root,root)
 %doc README THANKS
