@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.2
-%define	release	%mkrel 14
+%define	release	%mkrel 15
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -80,6 +80,14 @@ Requires:	%{libname} = %{version}
 %description -n %{libname}-devel
 Devel libraries & headers for liblzmadec.
 
+%package -n	dkms-%{name}
+Summary:	Kernel modules for decoding LZMA compression
+Group:		System/Kernel and hardware
+License:	GPL
+
+%description -n	dkms-%{name}
+Kernel modules for decoding LZMA compression.
+
 %prep
 %setup -q -n %{name}-%{oldlzmaver} -a1
 #%patch0 -p1 -b .427
@@ -110,6 +118,21 @@ find src/sdk -name makefile|xargs rm -f
 %patch12 -p1 -b .4.32.2
 %patch13 -p1 -b .file_modes
 
+pushd C/7zip/Compress/LZMA_C
+cp %{SOURCE3} kmod/
+cp uncomp.c LzmaDecode.{c,h} LzmaTypes.h kmod/
+perl -pi -e 's,^#include "\.\./(Lzma.*)",#include "$1",' kmod/*.{c,h}
+cat > kmod/dkms.conf <<EOF
+PACKAGE_NAME=%{name}
+PACKAGE_VERSION=%{version}-%{release}
+DEST_MODULE_LOCATION[0]="/kernel/lib/%{name}"
+DEST_MODULE_LOCATION[1]="/kernel/lib/%{name}"
+BUILT_MODULE_NAME[0]="sqlzma"
+BUILT_MODULE_NAME[1]="unlzma"
+AUTOINSTALL=yes
+EOF
+popd
+
 %build
 CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
@@ -129,11 +152,26 @@ rm -f %{buildroot}%{_libdir}/*.la
 ln -s lzma %{buildroot}%{_bindir}/lzmash
 install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
 
+mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}/
+tar c -C C/7zip/Compress/LZMA_C/kmod . | tar x -C %{buildroot}/usr/src/%{name}-%{version}-%{release}/
+
 %clean
 rm -rf %{buildroot}
 
 %post -n %{libname} -p /sbin/ldconfig
 %postun -n %{libname} -p /sbin/ldconfig
+
+%post -n dkms-%{name}
+set -x
+/usr/sbin/dkms --rpm_safe_upgrade add -m %{name} -v %{version}-%{release}
+/usr/sbin/dkms --rpm_safe_upgrade build -m %{name} -v %{version}-%{release}
+/usr/sbin/dkms --rpm_safe_upgrade install -m %{name} -v %{version}-%{release}
+:
+
+%preun -n dkms-%{name}
+set -x
+/usr/sbin/dkms --rpm_safe_upgrade remove -m %{name} -v %{version}-%{release} --all
+:
 
 %files
 %defattr(-,root,root)
@@ -152,3 +190,7 @@ rm -rf %{buildroot}
 %{_includedir}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.a
+
+%files -n dkms-%{name}
+%defattr(-,root,root)
+/usr/src/%{name}-%{version}-%{release}
