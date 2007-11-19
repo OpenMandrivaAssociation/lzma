@@ -58,9 +58,6 @@ tools. Also provides:
 
 - Very similar command line interface than what gzip and bzip2 have.
 
-- The patch for GNU tar integrates LZMA compression with the tar
-  command in the same way as with gzip and bzip2.
-
 %package -n	%{libname}
 Summary:	Libraries for decoding LZMA compression
 Group:		System/Libraries
