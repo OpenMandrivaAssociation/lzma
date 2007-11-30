@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
-%define	oldlzmaver	4.32.2
-%define	release	%mkrel 15
+%define	oldlzmaver	4.32.3
+%define	release	%mkrel 16
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -29,7 +29,7 @@ Patch9:		lzma-4.43-text-tune.patch
 #Patch11:	lzma-4.43-fix-liblzmadec-header-includes.patch
 # 4.32.2 has changes to sdk that we replace with newer, we apply these to the new
 Patch12:	lzma-4.32.2-sdk-changes.patch
-Patch13:	lzma-4.32.2-file_modes.patch
+#Patch13:	lzma-4.32.2-file_modes.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -113,7 +113,7 @@ find src/sdk -name makefile|xargs rm -f
 #%patch10 -p1 -b .stdout
 #%patch11 -p1 -b .lzmadec_systypes
 %patch12 -p1 -b .4.32.2
-%patch13 -p1 -b .file_modes
+#%patch13 -p1 -b .file_modes
 
 pushd C/7zip/Compress/LZMA_C
 cp %{SOURCE3} kmod/
@@ -135,8 +135,8 @@ CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 %configure2_5x
 %make
-%make -C C/7zip/Compress/LZMA_C -f sqlzma.mk Sqlzma=../../../..
-%make -C C/7zip/Compress/LZMA_Alone -f sqlzma.mk Sqlzma=../../../..
+%make CFLAGS="%{optflags} -c -Wall -pedantic -D _LZMA_PROB32  -DNDEBUG -include pthread.h -I../../../.." -C C/7zip/Compress/LZMA_C -f sqlzma.mk Sqlzma=../../../..
+%make CFLAGS="%{optflags} -c -I ../../../" -C C/7zip/Compress/LZMA_Alone -f sqlzma.mk Sqlzma=../../../..
 
 %install
 rm -rf %{buildroot}
@@ -151,6 +151,9 @@ install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
 
 mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}/
 tar c -C C/7zip/Compress/LZMA_C/kmod . | tar x -C %{buildroot}/usr/src/%{name}-%{version}-%{release}/
+
+%check
+make check
 
 %clean
 rm -rf %{buildroot}
