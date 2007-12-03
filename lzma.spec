@@ -30,6 +30,7 @@ Patch9:		lzma-4.43-text-tune.patch
 # 4.32.2 has changes to sdk that we replace with newer, we apply these to the new
 Patch12:	lzma-4.32.2-sdk-changes.patch
 #Patch13:	lzma-4.32.2-file_modes.patch
+Patch14:	lzma-4.32.3-liblzmadec-fix.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -114,6 +115,7 @@ find src/sdk -name makefile|xargs rm -f
 #%patch11 -p1 -b .lzmadec_systypes
 %patch12 -p1 -b .4.32.2
 #%patch13 -p1 -b .file_modes
+%patch14 -p1 -b .liblzmadec_fix
 
 pushd C/7zip/Compress/LZMA_C
 cp %{SOURCE3} kmod/
