@@ -13,7 +13,7 @@ License: 	GPL
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.gz
 Source1:	http://ovh.dl.sourceforge.net/sourceforge/sevenzip/lzma443.tar.bz2
-Source2:	lzme.bz2
+Source2:	lzme
 Source3:	sqlzma.h
 #Patch0:	lzma-432-makefile.patch.bz2
 #Patch1:	lzma-432-makefile-sdknew.patch.bz2
@@ -92,7 +92,6 @@ Kernel modules for decoding LZMA compression.
 #%patch1 -p1 -b .427_sdk
 #%patch2 -p1
 %patch3 -p1 -b .liblzma_r
-bzcat %{SOURCE2} > lzme
 cp %{SOURCE3} .
 dos2unix *.txt
 
@@ -143,7 +142,7 @@ CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-install -m755 lzme -D %{buildroot}%{_bindir}/lzme
+install -m755 %{SOURCE2} -D %{buildroot}%{_bindir}/lzme
 
 rm -f %{buildroot}%{_libdir}/*.la
 
