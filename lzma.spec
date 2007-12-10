@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
-%define	oldlzmaver	4.32.3
-%define	release	%mkrel 17
+%define	oldlzmaver	4.32.4
+%define	release	%mkrel 18
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -24,13 +24,13 @@ Patch5:		lzma-4.43-quiet.patch
 Patch6:		lzma-4.43-update-version.patch
 Patch7:		lzma-4.43-fix-fast-compression.patch
 Patch8:		lzma-4.43-add-missing-gethandle.patch
-Patch9:		lzma-4.43-text-tune.patch
+Patch9:		lzma-4.32.4-text-tune.patch
 #Patch10:	lzma-4.32.0beta3-fix-stdout.patch
 #Patch11:	lzma-4.43-fix-liblzmadec-header-includes.patch
 # 4.32.2 has changes to sdk that we replace with newer, we apply these to the new
 Patch12:	lzma-4.32.2-sdk-changes.patch
 #Patch13:	lzma-4.32.2-file_modes.patch
-Patch14:	lzma-4.32.3-liblzmadec-fix.patch
+#Patch14:	lzma-4.32.3-liblzmadec-fix.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
@@ -109,12 +109,12 @@ find src/sdk -name makefile|xargs rm -f
 %patch6 -p0 -b .version
 %patch7 -p0 -b .fast
 %patch8 -p0 -b .gethandle
-%patch9 -p0 -b .text
+%patch9 -p1 -b .text
 #%patch10 -p1 -b .stdout
 #%patch11 -p1 -b .lzmadec_systypes
 %patch12 -p1 -b .4.32.2
 #%patch13 -p1 -b .file_modes
-%patch14 -p1 -b .liblzmadec_fix
+#%patch14 -p1 -b .liblzmadec_fix
 
 pushd C/7zip/Compress/LZMA_C
 cp %{SOURCE3} kmod/
