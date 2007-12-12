@@ -22,6 +22,7 @@ Source3:	sqlzma.h
 # (blino) modified for 443, from sqlzma1-449.patch:
 #   * adapted to lzma443 dist structure: s,/C/Compress/Lzma/,/C/7zip/Compress/LZMA_C/,; s,/CPP/7zip/Compress/LZMA_Alone/,/C/7zip/Compress/LZMA_Alone/,
 #   * use sqlzma.mk makefiles for 443 (from from sqlzma1-443.patch)
+#   * remove NCoderPropID::kNumThreads in comp.cc, it is invalid since we don't build LZMAEncoder.cpp with COMPRESS_MF_MT multithread support
 Patch3:		lzma-4.32.4-sqlzma.patch
 
 Patch4:		lzma-4.43-add-missing-header.patch
