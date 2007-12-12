@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.4
-%define	release	%mkrel 18
+%define	release	%mkrel 19
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -15,10 +15,19 @@ Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.gz
 Source1:	http://ovh.dl.sourceforge.net/sourceforge/sevenzip/lzma443.tar.bz2
 Source2:	lzme
 Source3:	sqlzma.h
+
+# (blino) sqlzma makefiles for 443, to remove when upgrading to 449
+Source4:	sqlzma-443-C.mk
+Source5:	sqlzma-443-Alone.mk
+
 #Patch0:	lzma-432-makefile.patch.bz2
 #Patch1:	lzma-432-makefile-sdknew.patch.bz2
 #Patch2:	lzma-4.43-lzmp.patch
-Patch3:		sqlzma1-443.patch
+
+# (blino) modified with this command to adapt to lzma443 dist structure, to revert when upgrading to 449
+#   perl -pi -e 's,/C/Compress/Lzma/,/C/7zip/Compress/LZMA_C/,; s,/CPP/7zip/Compress/LZMA_Alone/,/C/7zip/Compress/LZMA_Alone/,' SOURCES/sqlzma1-449.patch
+Patch3:		sqlzma1-449.patch
+
 Patch4:		lzma-4.43-add-missing-header.patch
 Patch5:		lzma-4.43-quiet.patch
 Patch6:		lzma-4.43-update-version.patch
@@ -93,6 +102,8 @@ Kernel modules for decoding LZMA compression.
 #%patch2 -p1
 %patch3 -p1 -b .liblzma_r
 cp %{SOURCE3} .
+cp %{SOURCE4} C/7zip/Compress/LZMA_C/sqlzma.mk
+cp %{SOURCE5} C/7zip/Compress/LZMA_Alone/sqlzma.mk
 dos2unix *.txt
 
 # ugly syncing with latest sdk
