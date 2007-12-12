@@ -24,9 +24,9 @@ Source5:	sqlzma-443-Alone.mk
 #Patch1:	lzma-432-makefile-sdknew.patch.bz2
 #Patch2:	lzma-4.43-lzmp.patch
 
-# (blino) modified with this command to adapt to lzma443 dist structure, to revert when upgrading to 449
-#   perl -pi -e 's,/C/Compress/Lzma/,/C/7zip/Compress/LZMA_C/,; s,/CPP/7zip/Compress/LZMA_Alone/,/C/7zip/Compress/LZMA_Alone/,' SOURCES/sqlzma1-449.patch
-Patch3:		sqlzma1-449.patch
+# (blino) modified for 443, from sqlzma1-449.patch:
+#   * adapted to lzma443 dist structure: s,/C/Compress/Lzma/,/C/7zip/Compress/LZMA_C/,; s,/CPP/7zip/Compress/LZMA_Alone/,/C/7zip/Compress/LZMA_Alone/,
+Patch3:		lzma-4.32.4-sqlzma.patch
 
 Patch4:		lzma-4.43-add-missing-header.patch
 Patch5:		lzma-4.43-quiet.patch
@@ -100,7 +100,7 @@ Kernel modules for decoding LZMA compression.
 #%patch0 -p1 -b .427
 #%patch1 -p1 -b .427_sdk
 #%patch2 -p1
-%patch3 -p1 -b .liblzma_r
+%patch3 -p1 -b .sqlzma
 cp %{SOURCE3} .
 cp %{SOURCE4} C/7zip/Compress/LZMA_C/sqlzma.mk
 cp %{SOURCE5} C/7zip/Compress/LZMA_Alone/sqlzma.mk
