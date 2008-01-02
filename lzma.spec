@@ -41,6 +41,7 @@ Patch12:	lzma-4.32.2-sdk-changes.patch
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
 URL:		http://tukaani.org/lzma/
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 LZMA provides very high compression ratio and fast decompression. The
