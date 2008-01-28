@@ -11,7 +11,7 @@ Version: 	%{version}
 Release: 	%{release}
 License: 	GPL
 Group:		Archiving/Compression
-Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.gz
+Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.lzma
 Source1:	http://ovh.dl.sourceforge.net/sourceforge/sevenzip/lzma443.tar.bz2
 Source2:	lzme
 Source3:	sqlzma.h
