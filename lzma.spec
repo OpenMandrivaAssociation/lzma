@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
-%define	oldlzmaver	4.32.4
-%define	release	%mkrel 20
+%define	oldlzmaver	4.32.5
+%define	release	%mkrel 21
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
