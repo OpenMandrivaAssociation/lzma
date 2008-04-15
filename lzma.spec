@@ -39,7 +39,7 @@ Patch12:	lzma-4.32.2-sdk-changes.patch
 #Patch14:	lzma-4.32.3-liblzmadec-fix.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
-BuildRequires:	dos2unix
+BuildRequires:	dos2unix diffutils
 URL:		http://tukaani.org/lzma/
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -138,8 +138,8 @@ EOF
 popd
 
 %build
-CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
-CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64" \
+CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -O3" \
+CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -O3" \
 %configure2_5x
 %make
 %make CFLAGS="%{optflags} -c -Wall -pedantic -D _LZMA_PROB32  -DNDEBUG -include pthread.h -I../../../.." -C C/7zip/Compress/LZMA_C -f sqlzma.mk Sqlzma=../../../..
