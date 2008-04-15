@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.5
-%define	release	%mkrel 21
+%define	release	%mkrel 22
 %define	major	0
 %define	libname	%mklibname lzma %{major}
 
@@ -37,6 +37,7 @@ Patch9:		lzma-4.32.4-text-tune.patch
 Patch12:	lzma-4.32.2-sdk-changes.patch
 #Patch13:	lzma-4.32.2-file_modes.patch
 #Patch14:	lzma-4.32.3-liblzmadec-fix.patch
+Patch15:	lzma-4.32.5-fix-deprecated-string-conversion.patch
 # for squashfs-lzma library
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix diffutils
@@ -121,6 +122,7 @@ find src/sdk -name makefile|xargs rm -f
 %patch12 -p1 -b .4.32.2
 #%patch13 -p1 -b .file_modes
 #%patch14 -p1 -b .liblzmadec_fix
+%patch15 -p0 -b .fix_string_conversion
 
 pushd C/7zip/Compress/LZMA_C
 cp %{SOURCE3} kmod/
