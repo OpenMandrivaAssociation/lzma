@@ -1,9 +1,10 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.5
-%define	release	%mkrel 22
+%define	release	%mkrel 23
 %define	major	0
-%define	libname	%mklibname lzma %{major}
+%define libname %mklibname lzmadec %{major}
+%define libdev  %mklibname -d lzmadec
 
 Summary: 	LZMA utils
 Name: 		%{name}
@@ -70,19 +71,23 @@ tools. Also provides:
 Summary:	Libraries for decoding LZMA compression
 Group:		System/Libraries
 License:	LGPL
+Provides:	%{_lib}%{name}%{major} = %{version}-%{release}
+Obsoletes:  %{_lib}%{name}%{major} <= %{version}-%{release}
 
 %description -n	%{libname}
 Libraries for decoding LZMA compression.
 
-%package -n	%{libname}-devel
+%package -n	%{libdev}
 Summary:	Devel libraries & headers for liblzmadec
 Group:		Development/C
 License:	LGPL
 Provides:	liblzmadec-devel = %{version}-%{release}
+Provides:   %{_lib}%{name}%{major}-devel = %{version}-%{release}
+Obsoletes:  %{_lib}%{name}%{major}-devel <= %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}
 
-%description -n %{libname}-devel
+%description -n %{libdev}
 Devel libraries & headers for liblzmadec.
 
 %package -n	dkms-%{name}
@@ -192,7 +197,7 @@ set -x
 %defattr(-,root,root)
 %{_libdir}/lib*.so.*
 
-%files -n %{libname}-devel
+%files -n %{libdev}
 %defattr(644,root,root,755)
 %doc *.txt
 %defattr(-,root,root)
