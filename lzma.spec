@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.7
-%define	release	%mkrel 25
+%define	release	%mkrel 26
 %define	major	0
 %define libname %mklibname lzmadec %{major}
 %define libdev  %mklibname -d lzmadec
@@ -14,7 +14,7 @@ License: 	GPL
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.lzma
 Source1:	http://ovh.dl.sourceforge.net/sourceforge/sevenzip/lzma443.tar.bz2
-Source2:	lzme
+#Source2:	lzme
 Source3:	sqlzma.h
 #Patch0:	lzma-432-makefile.patch.bz2
 #Patch1:	lzma-432-makefile-sdknew.patch.bz2
@@ -157,16 +157,18 @@ CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -O3" \
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-install -m755 %{SOURCE2} -D %{buildroot}%{_bindir}/lzme
+#install -m755 %{SOURCE2} -D %{buildroot}%{_bindir}/lzme
 
 rm -f %{buildroot}%{_libdir}/*.la
 
 #symlink to provide backward compatibility for stuff still using old 'lzmash' script
-ln -s lzma %{buildroot}%{_bindir}/lzmash
+#ln -s lzma %{buildroot}%{_bindir}/lzmash
 install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
 
 mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}/
 tar c -C C/7zip/Compress/LZMA_C/kmod . | tar x -C %{buildroot}/usr/src/%{name}-%{version}-%{release}/
+
+rm -rf %{buildroot}{%{_bindir},%{_mandir}}
 
 %check
 make check
@@ -192,12 +194,6 @@ set -x
 set -x
 /usr/sbin/dkms --rpm_safe_upgrade remove -m %{name} -v %{version}-%{release} --all
 :
-
-%files
-%defattr(-,root,root)
-%doc README THANKS
-%{_bindir}/*
-%{_mandir}/man1/*
 
 %files -n %{libname}
 %defattr(-,root,root)
