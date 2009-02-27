@@ -1,7 +1,7 @@
 %define	name	lzma
 %define	version	4.43
 %define	oldlzmaver	4.32.7
-%define	release	%mkrel 26
+%define	release	%mkrel 27
 %define	major	0
 %define libname %mklibname lzmadec %{major}
 %define libdev  %mklibname -d lzmadec
@@ -95,6 +95,8 @@ Devel libraries & headers for liblzmadec.
 Summary:	Kernel modules for decoding LZMA compression
 Group:		System/Kernel and hardware
 License:	GPL
+Requires(post):	dkms
+Requires(preun):	dkms
 
 %description -n	dkms-%{name}
 Kernel modules for decoding LZMA compression.
