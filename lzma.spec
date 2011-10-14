@@ -103,9 +103,9 @@ Kernel modules for decoding LZMA compression.
 
 %prep
 %setup -q -n %{name}-%{oldlzmaver} -a1
-#%patch0 -p1 -b .427
-#%patch1 -p1 -b .427_sdk
-#%patch2 -p1
+#%#patch0 -p1 -b .427
+#%#patch1 -p1 -b .427_sdk
+#%#patch2 -p1
 %patch3 -p1 -b .sqlzma
 cp %{SOURCE3} .
 dos2unix *.txt
@@ -125,12 +125,12 @@ find src/sdk -name makefile|xargs rm -f
 %patch7 -p0 -b .fast
 %patch8 -p0 -b .gethandle
 %patch9 -p1 -b .text
-#%patch10 -p1 -b .stdout
-#%patch11 -p1 -b .lzmadec_systypes
+#%#patch10 -p1 -b .stdout
+#%#patch11 -p1 -b .lzmadec_systypes
 %patch12 -p1 -b .4.32.2
-#%patch13 -p1 -b .file_modes
-#%patch14 -p1 -b .liblzmadec_fix
-#%%patch15 -p0 -b .fix_string_conversion
+#%#patch13 -p1 -b .file_modes
+#%#patch14 -p1 -b .liblzmadec_fix
+#%#patch15 -p0 -b .fix_string_conversion
 %patch16 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 pushd C/7zip/Compress/LZMA_C
