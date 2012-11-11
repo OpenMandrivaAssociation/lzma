@@ -1,0 +1,23 @@
+--- lzma-4.32.0beta3/src/sdk/Common/Types.h~	2007-05-31 16:40:42.158205520 +0200
++++ lzma-4.32.0beta3/src/sdk/Common/Types.h	2007-05-31 17:22:13.745737867 +0200
+@@ -3,6 +3,10 @@
+ #ifndef __COMMON_TYPES_H
+ #define __COMMON_TYPES_H
+ 
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
+ #ifndef _7ZIP_BYTE_DEFINED
+ #define _7ZIP_BYTE_DEFINED
+ typedef unsigned char Byte;
+--- lzma-4.32.0beta3/src/sdk/Common/MyWindows.h~	2007-05-31 16:40:42.151206784 +0200
++++ lzma-4.32.0beta3/src/sdk/Common/MyWindows.h	2007-05-31 17:21:07.398761868 +0200
+@@ -19,6 +19,7 @@
+ #define STRING_PATH_SEPARATOR "/"
+ #define WSTRING_PATH_SEPARATOR L"/"
+ 
++#include <config.h>
+ #include <stddef.h> // for wchar_t
+ #include <string.h>
+ 

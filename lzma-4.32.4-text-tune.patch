@@ -1,0 +1,42 @@
+--- lzma-4.32.4/src/lzma/lzmp.cpp.text	2007-12-10 18:22:27.000000000 +0100
++++ lzma-4.32.4/src/lzma/lzmp.cpp	2007-12-10 18:28:03.000000000 +0100
+@@ -107,7 +107,7 @@ struct lzma_option {
+  * to the corresponding LZMA compression modes. Thanks, Larhzu, for coining
+  * these. */
+ const lzma_option option_mapping[] = {
+-	{ 0,  0,  0,    NULL, 0, 0, 0},		// -0 (needed for indexing)
++	{ 1, 18, 112, L"bt4", 3, 0, 0},		// -0
+ 	{ 0, 16, 64,  L"hc4", 3, 0, 2},		// -1
+ 	{ 0, 20, 64,  L"hc4", 3, 0, 2},		// -2
+ 	{ 1, 19, 64,  L"bt4", 3, 0, 2},		// -3
+@@ -167,11 +167,12 @@ const struct option long_options[] = {
+ 	{ "fast", 0, 0, '1' },
+ 	{ "best", 0, 0, '9' },
+ 	{ "format", 1, 0, OPT_FORMAT },
++	{ "text", 0, 0, '0' },
+ 	{ 0, 0, 0, 0 }
+ };
+ 
+ /* getopt option string (for the above options). */
+-const char option_string[] = "cdzkftS:qvhLV123456789A:D:F:";
++const char option_string[] = "cdzkftS:qvhLV0123456789A:D:F:";
+ 
+ /* Defaults. */
+ PROGRAM_MODE program_mode = PM_COMPRESS;
+@@ -208,6 +209,7 @@ void print_help(const char *const argv0)
+ "  -V --version      display version numbers of LZMA SDK and lzma\n"
+ "  -1 .. -2          fast compression\n"
+ "  -3 .. -9          good to excellent compression. -7 is the default.\n"
++"     --text         betted tuned for text compression\n"
+ "     --fast         alias for -1\n"
+ "     --best         alias for -9 (usually *not* what you want)\n\n"
+ "  Memory usage depends a lot on the chosen compression mode -1 .. -9.\n"
+@@ -337,7 +339,7 @@ void parse_options(int argc, char **argv
+ 				break;
+ 
+ 			case '1': case '2': case '3': case '4': case '5':
+-			case '6': case '7': case '8': case '9':
++			case '6': case '7': case '8': case '9': case '0':
+ 				compression_mode = c - '0';
+ 				break;
+ 

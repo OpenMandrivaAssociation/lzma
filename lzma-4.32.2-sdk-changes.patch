@@ -1,0 +1,57 @@
+--- lzma-4.32.2/src/sdk/7zip/Common/FileStreams.cpp.4.32.2	2007-10-27 17:39:23.000000000 +0200
++++ lzma-4.32.2/src/sdk/7zip/Common/FileStreams.cpp	2007-10-27 17:41:54.000000000 +0200
+@@ -205,6 +205,13 @@ STDMETHODIMP COutFileStream::SetSize(Int
+   #endif
+ }
+ 
++STDMETHODIMP COutFileStream::Close()
++{
++  if (!File.Close())
++    return E_FAIL;
++  return S_OK;
++}
++
+ #ifndef _WIN32_WCE
+ STDMETHODIMP CStdOutFileStream::Write(const void *data, UInt32 size, UInt32 *processedSize)
+ {
+@@ -247,5 +254,10 @@ STDMETHODIMP CStdOutFileStream::Write(co
+   return S_OK;
+   #endif
+ }
+-  
++
++STDMETHODIMP CStdOutFileStream::Close()
++{
++  return S_OK;
++}
++
+ #endif
+--- lzma-4.32.2/src/sdk/7zip/Common/FileStreams.h.4.32.2	2007-10-27 17:47:42.000000000 +0200
++++ lzma-4.32.2/src/sdk/7zip/Common/FileStreams.h	2007-10-27 17:48:05.000000000 +0200
+@@ -80,6 +80,7 @@ public:
+   STDMETHOD(Write)(const void *data, UInt32 size, UInt32 *processedSize);
+   STDMETHOD(Seek)(Int64 offset, UInt32 seekOrigin, UInt64 *newPosition);
+   STDMETHOD(SetSize)(Int64 newSize);
++  STDMETHOD(Close)();
+ };
+ 
+ #ifndef _WIN32_WCE
+@@ -92,6 +93,7 @@ public:
+ 
+   virtual ~CStdOutFileStream() {}
+   STDMETHOD(Write)(const void *data, UInt32 size, UInt32 *processedSize);
++  STDMETHOD(Close)();
+ };
+ #endif
+ 
+--- lzma-4.32.2/src/sdk/7zip/IStream.h.4.32.2	2007-10-27 17:57:54.000000000 +0200
++++ lzma-4.32.2/src/sdk/7zip/IStream.h	2007-10-27 17:58:00.000000000 +0200
+@@ -36,6 +36,8 @@ STREAM_INTERFACE(ISequentialOutStream, 0
+   This function is allowed to write less than "size".
+   You must call Write function in loop, if you need to write exact amount of data
+   */
++
++  STDMETHOD(Close)() PURE;
+ };
+ 
+ STREAM_INTERFACE_SUB(IInStream, ISequentialInStream, 0x03)

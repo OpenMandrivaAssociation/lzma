@@ -1,0 +1,20 @@
+--- C/Common/C_FileIO.h~	2004-07-24 13:35:06.000000000 +0200
++++ C/Common/C_FileIO.h	2007-06-08 18:20:36.000000000 +0200
+@@ -24,6 +24,7 @@ public:
+   bool Close();
+   bool GetLength(UInt64 &length) const;
+   off_t Seek(off_t distanceToMove, int moveMethod) const;
++  int GetHandle() const { return _handle; }
+ };
+ 
+ class CInFile: public CFileBase
+--- src/sdk/Common/C_FileIO.h.orig	2007-06-08 18:30:57.000000000 +0200
++++ src/sdk/Common/C_FileIO.h	2007-06-08 18:31:00.000000000 +0200
+@@ -24,6 +24,7 @@ public:
+   bool Close();
+   bool GetLength(UInt64 &length) const;
+   off_t Seek(off_t distanceToMove, int moveMethod) const;
++  int GetHandle() const { return _handle; }
+ };
+ 
+ class CInFile: public CFileBase

@@ -1,0 +1,39 @@
+--- src/lzma_version.h  2006-07-06 23:58:21.000000000 +0200
++++ src/sdk/7zip/Compress/LZMA_Alone/lzma_version.h	2007-06-08 18:09:25.000000000 +0200
+@@ -5,21 +5,21 @@
+     Version and copyright information used by LZMA utils.
+ */
+ 
+-static const char *LZMA_SDK_VERSION_STRING = "4.32";
++static const char *LZMA_SDK_VERSION_STRING = "4.43";
+ 
+ static const char *LZMA_SDK_COPYRIGHT_STRING =
+-		"Copyright (C) 1999-2005 Igor Pavlov";
++		"Copyright (C) 1999-2006 Igor Pavlov";
+ 
+ static const char *LZMA_SDK_COPYRIGHT_INFO =
+ 		"  See http://7-zip.org/sdk.html or the documentation of LZMA SDK for\n"
+-		"  the license. For reference, the version 4.32 is free software\n"
++		"  the license. For reference, the version 4.43 is free software\n"
+ 		"  licensed under the GNU LGPL.";
+ 
+ 
+ static const char *LZMA_UTILS_VERSION_STRING = PACKAGE_VERSION;
+ 
+ static const char *LZMA_UTILS_COPYRIGHT_STRING =
+-		"Copyright (C) 2005 Lasse Collin";
++		"Copyright (C) 2006 Lasse Collin";
+ 
+ static const char *LZMA_UTILS_COPYRIGHT_INFO =
+ 		"This program comes with ABSOLUTELY NO WARRANTY.\n"
+--- src/lzma/lzmp.cpp	2006-07-06 23:58:46.000000000 +0200
++++ C/7zip/Compress/LZMA_Alone/lzmp.cpp	2007-06-08 18:09:25.000000000 +0200
+@@ -72,7 +73,7 @@ typedef vector<string> stringVector;
+ namespace lzma {
+ 
+ const char *PROGRAM_VERSION = PACKAGE_VERSION;
+-const char *PROGRAM_COPYRIGHT = "Copyright (C) 2005 Ville Koskinen";
++const char *PROGRAM_COPYRIGHT = "Copyright (C) 2006 Ville Koskinen";
+ 
+ /* LZMA_Alone switches:
+     -a{N}:  set compression mode - [0, 2], default: 2 (max)

@@ -1,0 +1,74 @@
+diff -Naurp lzma-4.32.7/C/7zip/Compress/LZMA_Alone/LzmaAlone.cpp lzma-4.32.7.oden/C/7zip/Compress/LZMA_Alone/LzmaAlone.cpp
+--- lzma-4.32.7/C/7zip/Compress/LZMA_Alone/LzmaAlone.cpp	2008-12-21 18:47:23.000000000 +0100
++++ lzma-4.32.7.oden/C/7zip/Compress/LZMA_Alone/LzmaAlone.cpp	2008-12-21 18:47:45.000000000 +0100
+@@ -444,7 +444,7 @@ int main2(int n, const char *args[])
+       Byte b = Byte(fileSize >> (8 * i));
+       if (outStream->Write(&b, 1, 0) != S_OK)
+       {
+-        fprintf(stderr, kWriteError);
++        fprintf(stderr, "%s", kWriteError);
+         return 1;
+       }
+     }
+@@ -470,12 +470,12 @@ int main2(int n, const char *args[])
+     UInt32 processedSize;
+     if (ReadStream(inStream, properties, kPropertiesSize, &processedSize) != S_OK)
+     {
+-      fprintf(stderr, kReadError);
++      fprintf(stderr, "%s", kReadError);
+       return 1;
+     }
+     if (processedSize != kPropertiesSize)
+     {
+-      fprintf(stderr, kReadError);
++      fprintf(stderr, "%s", kReadError);
+       return 1;
+     }
+     if (decoderSpec->SetDecoderProperties2(properties, kPropertiesSize) != S_OK)
+@@ -489,12 +489,12 @@ int main2(int n, const char *args[])
+       Byte b;
+       if (inStream->Read(&b, 1, &processedSize) != S_OK)
+       {
+-        fprintf(stderr, kReadError);
++        fprintf(stderr, "%s", kReadError);
+         return 1;
+       }
+       if (processedSize != 1)
+       {
+-        fprintf(stderr, kReadError);
++        fprintf(stderr, "%s", kReadError);
+         return 1;
+       }
+       fileSize |= ((UInt64)b) << (8 * i);
+diff -Naurp lzma-4.32.7/C/7zip/Compress/LZMA_Alone/LzmaBench.cpp lzma-4.32.7.oden/C/7zip/Compress/LZMA_Alone/LzmaBench.cpp
+--- lzma-4.32.7/C/7zip/Compress/LZMA_Alone/LzmaBench.cpp	2006-04-27 07:57:31.000000000 +0200
++++ lzma-4.32.7.oden/C/7zip/Compress/LZMA_Alone/LzmaBench.cpp	2008-12-21 18:47:45.000000000 +0100
+@@ -363,7 +363,7 @@ static void ThrowError(FILE *f, HRESULT 
+   if (result == E_OUTOFMEMORY)
+     fprintf(f, "Can not allocate memory");
+   else
+-    fprintf(f, s);
++    fprintf(f, "%s", s);
+   fprintf(f, "\n");
+ }
+ 
+diff -Naurp lzma-4.32.7/C/7zip/Compress/LZMA_C/LzmaTest.c lzma-4.32.7.oden/C/7zip/Compress/LZMA_C/LzmaTest.c
+--- lzma-4.32.7/C/7zip/Compress/LZMA_C/LzmaTest.c	2005-08-05 12:17:06.000000000 +0200
++++ lzma-4.32.7.oden/C/7zip/Compress/LZMA_C/LzmaTest.c	2008-12-21 18:47:45.000000000 +0100
+@@ -64,7 +64,7 @@ unsigned char g_OutBuffer[kOutBufferSize
+ int PrintError(char *buffer, const char *message)
+ {
+   sprintf(buffer + strlen(buffer), "\nError: ");
+-  sprintf(buffer + strlen(buffer), message);
++  sprintf(buffer + strlen(buffer), "%s", message);
+   return 1;
+ }
+ 
+@@ -337,6 +337,6 @@ int main(int numArgs, const char *args[]
+ {
+   char rs[800] = { 0 };
+   int res = main2(numArgs, args, rs);
+-  printf(rs);
++  printf("%s", rs);
+   return res;
+ }

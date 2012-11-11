@@ -1,0 +1,11 @@
+--- ./src/lzma/lzmp.cpp	2006-07-06 23:58:46.000000000 +0200
++++ ./C/7zip/Compress/LZMA_Alone/lzmp.cpp	2007-06-08 18:09:25.000000000 +0200
+@@ -100,7 +101,7 @@ struct lzma_option {
+  * these. */
+ const lzma_option option_mapping[] = {
+ 	{ 0,  0,  0,    NULL, 0, 0, 0},		// -0 (needed for indexing)
+-	{ 0, 16, 64,  L"hc3", 3, 0, 2},		// -1
++	{ 0, 16, 64,  L"hc4", 3, 0, 2},		// -1
+ 	{ 0, 20, 64,  L"hc4", 3, 0, 2},		// -2
+ 	{ 1, 19, 64,  L"bt4", 3, 0, 2},		// -3
+ 	{ 2, 20, 64,  L"bt4", 3, 0, 2},		// -4
