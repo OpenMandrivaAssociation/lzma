@@ -1,4 +1,2 @@
 sources:
-  "lzma-4.32.7.tar.lzma:"	f06af62ac399722cb0e9f861397c55d2e8c479b8
-  "lzma443.tar.bz2:"	1667abfb40da82d53fa2690f3cd58a0e7e751e55
-  "sqlzma.h:"	d97180533cf43ddee2e3b2cb7b646093857e883d
+  "lzma443.tar.bz2": 1667abfb40da82d53fa2690f3cd58a0e7e751e55
