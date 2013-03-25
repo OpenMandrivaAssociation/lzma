@@ -29,6 +29,7 @@ Patch9:		lzma-4.32.4-text-tune.patch
 Patch12:	lzma-4.32.2-sdk-changes.patch
 Patch16:	lzma-4.32.7-format_not_a_string_literal_and_no_format_arguments.diff
 # for squashfs-lzma library
+Patch17:	lzma-aarch64.patch
 BuildRequires:	zlib-devel
 BuildRequires:	dos2unix
 BuildRequires:	diffutils
@@ -108,6 +109,7 @@ find src/sdk -name makefile|xargs rm -f
 %patch9 -p1 -b .text
 %patch12 -p1 -b .4.32.2
 %patch16 -p1 -b .format_not_a_string_literal_and_no_format_arguments
+%patch17 -p1 -b .aarch64
 
 pushd C/7zip/Compress/LZMA_C
 cp %{SOURCE3} kmod/
