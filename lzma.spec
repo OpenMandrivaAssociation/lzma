@@ -6,7 +6,7 @@
 Summary:	LZMA utils
 Name:		lzma
 Version:	4.43
-Release:	36
+Release:	37
 License:	GPLv2
 Group:		Archiving/Compression
 Url:		http://tukaani.org/lzma/
