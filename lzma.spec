@@ -137,7 +137,7 @@ CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -O3" \
 install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
 
 mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}/
-tar c -C C/7zip/Compress/LZMA_C/kmod . | tar x -C %{buildroot}/usr/src/%{name}-%{version}-%{release}/
+tar -c -C C/7zip/Compress/LZMA_C/kmod . | tar -xf -C %{buildroot}/usr/src/%{name}-%{version}-%{release}/
 
 rm -rf %{buildroot}{%{_bindir},%{_mandir}}
 
