@@ -6,7 +6,7 @@
 Summary:	LZMA utils
 Name:		lzma
 Version:	19.00
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Archiving/Compression
 Url:		http://tukaani.org/lzma/
