@@ -1,3 +1,7 @@
+%global ver_maj 24
+%global ver_min 08
+%global ver_rel 0
+
 %define oldlzmaver 4.32.7
 %define major 0
 %define libname %mklibname lzmadec %{major}
@@ -5,33 +9,33 @@
 
 Summary:	LZMA utils
 Name:		lzma
-Version:	19.00
-Release:	2
+Version:	%{ver_maj}.%{ver_min}
+Release:	1
 License:	GPLv2
 Group:		Archiving/Compression
-Url:		http://tukaani.org/lzma/
-Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.lzma
-Source1:	http://ovh.dl.sourceforge.net/sourceforge/sevenzip/lzma443.tar.bz2
-Source3:	sqlzma.h
+Url:		https://tukaani.org/lzma/
+Source0:	https://downloads.sourceforge.net/project/sevenzip/LZMA%20SDK/lzma%{ver_maj}%{ver_min}.7z
+#Source3:	sqlzma.h
 # (blino) modified for 443, from sqlzma1-449.patch:
 #   * adapted to lzma443 dist structure: s,/C/Compress/Lzma/,/C/7zip/Compress/LZMA_C/,; s,/CPP/7zip/Compress/LZMA_Alone/,/C/7zip/Compress/LZMA_Alone/,
 #   * use sqlzma.mk makefiles for 443 (from from sqlzma1-443.patch)
 #   * remove NCoderPropID::kNumThreads in comp.cc, it is invalid since we don't build LZMAEncoder.cpp with COMPRESS_MF_MT multithread support
-Patch3:		lzma-4.32.4-sqlzma.patch
-Patch4:		lzma-4.43-add-missing-header.patch
-Patch5:		lzma-4.43-quiet.patch
-Patch6:		lzma-4.43-update-version.patch
-Patch7:		lzma-4.43-fix-fast-compression.patch
-Patch8:		lzma-4.43-add-missing-gethandle.patch
-Patch9:		lzma-4.32.4-text-tune.patch
+#Patch3:		lzma-4.32.4-sqlzma.patch
+#Patch4:		lzma-4.43-add-missing-header.patch
+#Patch5:		lzma-4.43-quiet.patch
+#Patch6:		lzma-4.43-update-version.patch
+#Patch7:		lzma-4.43-fix-fast-compression.patch
+#Patch8:		lzma-4.43-add-missing-gethandle.patch
+#Patch9:		lzma-4.32.4-text-tune.patch
 # 4.32.2 has changes to sdk that we replace with newer, we apply these to the new
-Patch12:	lzma-4.32.2-sdk-changes.patch
-Patch16:	lzma-4.32.7-format_not_a_string_literal_and_no_format_arguments.diff
+#Patch12:	lzma-4.32.2-sdk-changes.patch
+#Patch16:	lzma-4.32.7-format_not_a_string_literal_and_no_format_arguments.diff
 # for squashfs-lzma library
-Patch17:	lzma-aarch64.patch
+#Patch17:	lzma-aarch64.patch
 BuildRequires:	diffutils
 BuildRequires:	dos2unix
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	7zip
 
 %description
 LZMA provides very high compression ratio and fast decompression. The
@@ -84,65 +88,64 @@ Requires(post,preun):	dkms
 Kernel modules for decoding LZMA compression.
 
 %prep
-%setup -qn %{name}-%{oldlzmaver} -a1
-%patch3 -p1 -b .sqlzma
-cp %{SOURCE3} .
-dos2unix *.txt
+%autosetup -p1 -c -n lzma-sdk
+	
+rm -rv bin
 
-# ugly syncing with latest sdk
-mv src/sdk src/sdk.old
-cp -r C src/sdk
-for i in `find src/sdk.old -name Makefile.\*`; do
-	cp $i `echo $i|sed -e 's#sdk.old#sdk#g'`;
+for f in .h .c .cpp .dsw .dsp .java .cs .txt makefile; do
+   find . -iname "*$f" | xargs chmod -x
 done
 
-find src/sdk -name makefile|xargs rm -f
+# correct end-of-line encoding
+find . -type f -name '*.txt' | xargs dos2unix -k
 
-%patch4 -p1 -b .config_h
-%patch5 -p1 -b .quiet
-%patch6 -p0 -b .version
-%patch7 -p0 -b .fast
-%patch8 -p0 -b .gethandle
-%patch9 -p1 -b .text
-%patch12 -p1 -b .4.32.2
-%patch16 -p1 -b .format_not_a_string_literal_and_no_format_arguments
-%patch17 -p1 -b .aarch64
+for i in \
+DOC/7zC.txt \
+DOC/7zFormat.txt \
+DOC/installer.txt \
+DOC/lzma-history.txt \
+DOC/lzma-sdk.txt \
+DOC/lzma-specification.txt \
+DOC/lzma.txt \
+DOC/Methods.txt \
+CS/7zip/Compress/LzmaAlone/LzmaAlone.sln \
+CPP/7zip/Bundles/Alone7z/resource.rc \
+CPP/7zip/Bundles/LzmaCon/makefile.gcc \
+CPP/Build.mak \
+C/Util/Lzma/makefile.gcc \
+CPP/7zip/Bundles/Format7zR/resource.rc \
+C/Util/7z/makefile.gcc \
+CPP/7zip/Archive/Archive.def \
+CPP/7zip/Bundles/Format7zExtractR/resource.rc \
+C/Util/LzmaLib/resource.rc \
+CPP/7zip/Archive/Archive2.def \
+CPP/7zip/MyVersionInfo.rc \
+DOC/Methods.txt \
+C/Util/LzmaLib/LzmaLib.def; do
+    iconv -f iso-8859-1 -t utf-8 $i > $i.utf8
+    touch -r $i $i.utf8
+    mv $i.utf8 $i
+done
 
-pushd C/7zip/Compress/LZMA_C
-cp %{SOURCE3} kmod/
-cp uncomp.c LzmaDecode.{c,h} LzmaTypes.h kmod/
-perl -pi -e 's,^#include "\.\./(Lzma.*)",#include "$1",' kmod/*.{c,h}
-cat > kmod/dkms.conf <<EOF
-PACKAGE_NAME=%{name}
-PACKAGE_VERSION=%{version}-%{release}
-DEST_MODULE_LOCATION[0]="/kernel/lib/%{name}"
-DEST_MODULE_LOCATION[1]="/kernel/lib/%{name}"
-BUILT_MODULE_NAME[0]="sqlzma"
-BUILT_MODULE_NAME[1]="unlzma"
-AUTOINSTALL=yes
-EOF
-popd
+#install -p -m 0644 %{SOURCE1} .
 
 %build
-CFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -O3" \
-CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64 -O3" \
-%configure2_5x
-%make
-%make CFLAGS="%{optflags} -c -Wall -pedantic -D _LZMA_PROB32  -DNDEBUG -include pthread.h -I../../../.." -C C/7zip/Compress/LZMA_C -f sqlzma.mk Sqlzma=../../../..
-%make CFLAGS="%{optflags} -c -I ../../../" -C C/7zip/Compress/LZMA_Alone -f sqlzma.mk Sqlzma=../../../..
+pushd CPP/7zip/Bundles/LzmaCon
+make -f makefile.gcc clean all CXXFLAGS_EXTRA="%{build_cxxflags}" CFLAGS_WARN="%{build_cflags}" LDFLAGS_STATIC_2="%{build_cxxflags}"
+popd
 
 %install
-%makeinstall_std
+install -dm0755 %{buildroot}%{_libdir}
+install -pm0755 CPP/7zip/Bundles/LzmaCon/liblzmasdk.so.%{ver_maj}.%{ver_min}.%{ver_rel} %{buildroot}%{_libdir}
+pushd %{buildroot}%{_libdir}
+ln -s liblzmasdk.so.%{ver_maj}.%{ver_min}.%{ver_rel} liblzmasdk.so.%{ver_maj}
+ln -s liblzmasdk.so.%{ver_maj}.%{ver_min}.%{ver_rel} liblzmasdk.so
+popd
+install -dm0755 %{buildroot}/%{_includedir}/lzma
+find -iname '*.h' | xargs -I {} install -m0644 -D {} %{buildroot}/%{_includedir}/lzma-sdk/{}
+#contains only Windows related headers so for fedora useless
+rm -rv %{buildroot}/usr/include/lzma-sdk/CPP/Windows
 
-install C/7zip/Compress/LZMA_*/*.a %{buildroot}%{_libdir}
-
-mkdir -p %{buildroot}/usr/src/%{name}-%{version}-%{release}/
-tar cf - -C C/7zip/Compress/LZMA_C/kmod . | tar xf - -C %{buildroot}/usr/src/%{name}-%{version}-%{release}/
-
-rm -rf %{buildroot}{%{_bindir},%{_mandir}}
-
-%check
-make check
 
 %post -n dkms-%{name}
 set -x
