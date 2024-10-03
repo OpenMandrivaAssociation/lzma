@@ -92,40 +92,6 @@ Kernel modules for decoding LZMA compression.
 	
 rm -rv bin
 
-for f in .h .c .cpp .dsw .dsp .java .cs .txt makefile; do
-   find . -iname "*$f" | xargs chmod -x
-done
-
-# correct end-of-line encoding
-find . -type f -name '*.txt' | xargs dos2unix -k
-
-for i in \
-DOC/7zC.txt \
-DOC/7zFormat.txt \
-DOC/installer.txt \
-DOC/lzma-history.txt \
-DOC/lzma-sdk.txt \
-DOC/lzma-specification.txt \
-DOC/lzma.txt \
-DOC/Methods.txt \
-CS/7zip/Compress/LzmaAlone/LzmaAlone.sln \
-CPP/7zip/Bundles/Alone7z/resource.rc \
-CPP/7zip/Bundles/LzmaCon/makefile.gcc \
-CPP/Build.mak \
-C/Util/Lzma/makefile.gcc \
-CPP/7zip/Bundles/Format7zR/resource.rc \
-C/Util/7z/makefile.gcc \
-CPP/7zip/Archive/Archive.def \
-CPP/7zip/Bundles/Format7zExtractR/resource.rc \
-C/Util/LzmaLib/resource.rc \
-CPP/7zip/Archive/Archive2.def \
-CPP/7zip/MyVersionInfo.rc \
-DOC/Methods.txt \
-C/Util/LzmaLib/LzmaLib.def; do
-    iconv -f iso-8859-1 -t utf-8 $i > $i.utf8
-    touch -r $i $i.utf8
-    mv $i.utf8 $i
-done
 
 #install -p -m 0644 %{SOURCE1} .
 
