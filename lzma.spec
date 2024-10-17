@@ -9,7 +9,7 @@ Version:	19.00
 Release:	2
 License:	GPLv2
 Group:		Archiving/Compression
-Url:		http://tukaani.org/lzma/
+Url:		https://tukaani.org/lzma/
 Source0:	http://tukaani.org/lzma/lzma-%{oldlzmaver}.tar.lzma
 Source1:	http://ovh.dl.sourceforge.net/sourceforge/sevenzip/lzma443.tar.bz2
 Source3:	sqlzma.h
